@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+
+<body>
+    <h1 id="answer">
+        <%= title %>
+    </h1>
+    <form id="form" action="/form" method="POST">
+        <input type="number" name="numberOne" id="numberOne">
+        <input type="number" name="numberTwo" id="numberTwo">
+        <select id="operation" name="operation">
+            <option value="multiply">Multiply</option>
+            <option value="devide">Devide</option>
+            <option value="addition">Addition</option>
+            <option value="substraction">Substraction</option>
+        </select>
+        <button>SEND</button>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function onSuccess(res) {
+            // console.log(res)
+            // $('#answer').html(`The answer is: ${res.result}`)
+            $('#answer').html(`${$('#numberOne').val()} ${$('#operation').val()} ${$('#numberTwo').val()} equals ${res.result}`)
+
+        }
+
+        function performAXAJ(data) {
+            $.ajax({
+                type: "POST",
+                url: "/form",
+                data: data,
+                success: onSuccess,
+                dataType: "json",
+                contentType: "application/json"
+            });
+        }
+
+        $('#form').on('submit', function (e) {
+            e.preventDefault()
+            const arr = JSON.stringify($(this).serializeArray())
+
+            performAXAJ(arr)
+
+        })
+    </script>
+</body>
+
+</html>
